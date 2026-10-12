@@ -1,7 +1,8 @@
 # 🎭 CallCeleb — Talk to Celebrity Voice Clones in Real-Time
 
 <p align="center">
-  <b>Real-time voice conversations with AI-powered celebrity clones</b>
+  <b>Real-time voice conversations with AI-powered celebrity clones</b><br>
+  <i>1-2 second latency • 95% voice similarity • Works on any device</i>
 </p>
 
 <p align="center">
@@ -10,61 +11,118 @@
 
 ---
 
-## 🎬 What is this?
+## What is this?
 
-Pick a celebrity. Click call. Talk to them.
+Pick a celebrity. Click call. **Talk to them live.**
 
-They respond with their **real cloned voice** — not a generic TTS. Real-time, like a phone call.
+They respond with their **actual cloned voice** — not generic TTS. Real conversation, like a phone call.
 
-**Available now:**
-- 🇷🇺 Putin, Navalny, Garik Kharlamov, Demis Karibidis
-- 🇺🇸 Trump, Jordan Peterson, Alan Watts, JFK
-- ...and ~20 more
-
----
-
-## ⚡ How fast?
-
-**1-2 seconds** from when you stop talking to hearing them respond.
-
-Not a gimmick. Actually works. Try it.
+**Available celebrities:**
+| 🇷🇺 Russian | 🇺🇸 English |
+|------------|-------------|
+| Vladimir Putin | Donald Trump |
+| Alexei Navalny | Jordan Peterson |
+| Garik Kharlamov | Alan Watts |
+| Demis Karibidis | JFK, Nixon, Reagan |
 
 ---
 
-## 🛠 Tech highlights
+## ⚡ Performance
 
-- Custom voice cloning pipeline — **95% voice similarity**
-- Full-duplex WebRTC audio streaming
-- Streaming LLM + TTS — no waiting for full response
-- Multi-region GPU infrastructure
-
----
-
-## 💡 The story
-
-Solo dev. Couldn't code a year ago. Spent 12 months building this with Claude.
-
-$10K AWS credits. Mass amount of tokens. One working product.
+| Metric | Value |
+|--------|-------|
+| **End-to-end latency** | 1-2 seconds |
+| **Voice similarity** | ~95% |
+| **Concurrent users** | 50+ per region |
 
 ---
 
-## 🚀 Try it
+## 🏗 Architecture
+
+```
+User Device (WebRTC + WebSocket)
+              │
+              ▼
+┌─────────────────────────────────┐
+│     GATEWAY (Load Balancer)     │
+│  • Celebrity-aware routing      │
+│  • Health monitoring            │
+└───────────────┬─────────────────┘
+                │
+    ┌───────────┼───────────┐
+    ▼           ▼           ▼
+┌───────┐  ┌───────┐  ┌───────┐
+│Worker │  │Worker │  │Worker │
+│US-1   │  │US-2   │  │EU     │
+├───────┤  ├───────┤  ├───────┤
+│Whisper│  │Whisper│  │Whisper│
+│Gemini │  │Gemini │  │Gemini │
+│CosyTTS│  │CosyTTS│  │CosyTTS│
+└───────┘  └───────┘  └───────┘
+ Putin      Putin      Garik
+ Navalny    Navalny    Karibidis
+```
+
+---
+
+## 🎯 Latency Breakdown
+
+```
+User stops speaking
+    → 50ms  VAD detects silence
+    → 200ms Whisper transcribes  
+    → 800ms LLM first sentence (streaming)
+    → 400ms TTS first audio chunk
+    ─────────────────────────────
+    ~1500ms total
+```
+
+---
+
+## 🔧 Tech Stack
+
+| Component | Technology |
+|-----------|------------|
+| ASR | Whisper (faster-whisper) |
+| LLM | Gemini 3.8 Flash |
+| TTS | CosyVoice / VoxCPM (custom fine-tuned) |
+| Transport | WebRTC + WebSocket |
+| Infra | AWS Spot g5.xlarge |
+
+---
+
+## 💰 Cost
+
+~$0.02 per minute of conversation
+
+Running on $10K AWS credits.
+
+---
+
+## 💡 The Story
+
+Solo dev. Couldn't code 12 months ago.
+
+Started with ChatGPT — disaster. Switched to Claude — magic.
+
+Now strangers talk to AI Putin about coffee. ☕
+
+---
+
+## 🚀 Try It
 
 **[callceleb.online/ru/](https://callceleb.online/ru/)**
 
-Free. No registration. Works on phone and desktop.
+No registration. No payment. Just click and talk.
 
 ---
 
 ## 📬 Contact
 
-Want to license the tech, invest, or collaborate?
+**Licensing / Investment / Collaboration:**
 
-**Email:** maks.karasev.2020@gmail.com
+maks.karasev.2020@gmail.com
 
 ---
 
-<p align="center">
-  <b>Built with mass amounts of Claude tokens ☕</b>
-</p>
-
+<p align="center"><b>Built with mass amounts of Claude tokens</b></p>
